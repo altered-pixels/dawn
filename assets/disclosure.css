@@ -13,17 +13,15 @@
 }
 
 .disclosure__list-wrapper {
-  border-width: var(--popup-border-width);
+  border-width: 0.1rem;
   border-style: solid;
-  border-color: rgba(var(--color-foreground), var(--popup-border-opacity));
+  border-color: rgb(var(--color-foreground));
   overflow: hidden;
   position: absolute;
   bottom: 100%;
   transform: translateY(-1rem);
   z-index: 2;
   background-color: rgb(var(--color-background));
-  border-radius: var(--popup-corner-radius);
-  box-shadow: var(--popup-shadow-horizontal-offset) var(--popup-shadow-vertical-offset) var(--popup-shadow-blur-radius) rgba(var(--color-shadow), var(--popup-shadow-opacity));
 }
 
 .disclosure__list {
@@ -48,5 +46,5 @@
   display: block;
   padding: 0.5rem 2.2rem;
   text-decoration: none;
-  line-height: calc(1 + 0.8 / var(--font-body-scale));
+  line-height: 1.8;
 }

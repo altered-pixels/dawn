@@ -7,37 +7,24 @@
 }
 
 .cart-notification {
-  border-bottom-right-radius: var(--popup-corner-radius);
-  border-bottom-left-radius: var(--popup-corner-radius);
-  border-color: rgba(var(--color-foreground), var(--popup-border-opacity));
+  border-color: rgb(var(--color-foreground));
   border-style: solid;
-  border-width: 0 0 var(--popup-border-width);
+  border-width: 0 0 0.1rem;
   padding: 2.5rem 3.5rem;
   position: absolute;
   right: 0;
   transform: translateY(-100%);
   visibility: hidden;
   width: 100%;
-  box-shadow: var(--popup-shadow-horizontal-offset) var(--popup-shadow-vertical-offset) var(--popup-shadow-blur-radius) rgba(var(--color-shadow), var(--popup-shadow-opacity));
-}
-
-.cart-notification.focused {
-  box-shadow: 0 0 .2rem 0 rgba(var(--color-foreground), .3),
-  var(--popup-shadow-horizontal-offset) var(--popup-shadow-vertical-offset) var(--popup-shadow-blur-radius) rgba(var(--color-shadow), var(--popup-shadow-opacity));
-}
-
-.cart-notification:focus-visible {
-  box-shadow: 0 0 .2rem 0 rgba(var(--color-foreground), .3),
-  var(--popup-shadow-horizontal-offset) var(--popup-shadow-vertical-offset) var(--popup-shadow-blur-radius) rgba(var(--color-shadow), var(--popup-shadow-opacity));
 }
 
 @media screen and (min-width: 750px) {
   .header-wrapper:not(.header-wrapper--border-bottom) + cart-notification .cart-notification {
-    border-top-width: var(--popup-border-width);
+    border-top-width: 0.1rem;
   }
 
   .cart-notification {
-    border-width: 0 var(--popup-border-width) var(--popup-border-width);
+    border-width: 0 0.1rem 0.1rem;
     max-width: 36.8rem;
     right: 4rem;
   }

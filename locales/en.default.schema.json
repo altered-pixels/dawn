@@ -366,17 +366,14 @@
       },
       "spacing": "Spacing",
       "colors": {
-        "accent_1": {
-          "label": "Accent 1"
+        "accent": {
+          "label": "Accent"
         },
-        "accent_2": {
-          "label": "Accent 2"
+        "background_light": {
+          "label": "Light Background"
         },
-        "background_1": {
-          "label": "Background 1"
-        },
-        "background_2": {
-          "label": "Background 2"
+        "background_dark": {
+          "label": "Dark Background"
         },
         "inverse": {
           "label": "Inverse"

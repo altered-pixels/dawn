@@ -15,10 +15,6 @@
       <link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 32, height: 32 }}">
     {%- endif -%}
 
-    {%- unless settings.type_header_font.system? -%}
-      <link rel="preconnect" href="https://fonts.shopifycdn.com" crossorigin>
-    {%- endunless -%}
-
     {%- assign formatted_initial_value = gift_card.initial_value | money_without_trailing_zeros | strip_html -%}
 
     <title>{{ 'gift_cards.issued.title' | t: value: formatted_initial_value, shop: shop.name }}</title>
@@ -27,75 +23,106 @@
 
     {{ content_for_header }}
 
-    {%- liquid
-      assign body_font_bold = settings.type_body_font | font_modify: 'weight', 'bold'
-      assign body_font_italic = settings.type_body_font | font_modify: 'style', 'italic'
-      assign body_font_bold_italic = body_font_bold | font_modify: 'style', 'italic'
+    {% liquid
+      assign color_black = '#0b0b0b'
+      assign color_white = '#ffffff'
+      assign color_gray_400 = '#f3f3f3'
+      assign color_gray_500 = '#bebebe'
+      assign color_gray_600 = '#9a9a9a'
+      assign color_gray_700 = '#6f6f6f'
+      assign color_blue_500 = '#0080bb'
+      assign color_red_500 = '#ff2e00'
+      assign color_yellow_500 = '#f0d800'
+      assign color_green_500 = '#00b140'
     %}
 
     {% style %}
-      {{ settings.type_body_font | font_face: font_display: 'swap' }}
-      {{ body_font_bold | font_face: font_display: 'swap' }}
-      {{ body_font_italic | font_face: font_display: 'swap' }}
-      {{ body_font_bold_italic | font_face: font_display: 'swap' }}
-      {{ settings.type_header_font | font_face: font_display: 'swap' }}
+      @font-face {
+        font-family: "Futura Now Text";
+        src: url("{{ 'FuturaNowText.woff2' | asset_url }}") format("woff2"),
+            url("{{ 'FuturaNowText.woff' | asset_url }}") format("woff");
+        font-weight: normal;
+        font-style: normal;
+        font-display: swap;
+      }
+
+      @font-face {
+        font-family: "Futura Now Text";
+        src: url("{{ 'FuturaNowText-Italic.woff2' | asset_url }}") format("woff2"),
+            url("{{ 'FuturaNowText-Italic.woff' | asset_url }}") format("woff");
+        font-weight: normal;
+        font-style: italic;
+        font-display: swap;
+      }
+
+      @font-face {
+        font-family: "Futura Now Text";
+        src: url("{{ 'FuturaNowText-Medium.woff2' | asset_url }}") format("woff2"),
+            url("{{ 'FuturaNowText-Medium.woff' | asset_url }}") format("woff");
+        font-weight: 500;
+        font-style: normal;
+        font-display: swap;
+      }
+
+      @font-face {
+        font-family: "Futura Now Text";
+        src: url("{{ 'FuturaNowText-Bold.woff2' | asset_url }}") format("woff2"),
+            url("{{ 'FuturaNowText-Bold.woff' | asset_url }}") format("woff");
+        font-weight: bold;
+        font-style: normal;
+        font-display: swap;
+      }
 
       :root {
-        --font-body-family: {{ settings.type_body_font.family }}, {{ settings.type_body_font.fallback_families }};
-        --font-body-style: {{ settings.type_body_font.style }};
-        --font-body-weight: {{ settings.type_body_font.weight }};
+        --font-family--primary: "Futura Now Text", "Futura", "Trebuchet MS", "Arial", sans-serif;
 
-        --font-heading-family: {{ settings.type_header_font.family }}, {{ settings.type_header_font.fallback_families }};
-        --font-heading-style: {{ settings.type_header_font.style }};
-        --font-heading-weight: {{ settings.type_header_font.weight }};
+        --font-body-family: var(--font-family--primary);
+        --font-body-style: normal;
+        --font-body-weight: 400;
+        --font-body-weight-bold: 600;
 
-        --font-body-scale: {{ settings.body_scale | divided_by: 100.0 }};
-        --font-heading-scale: {{ settings.heading_scale | times: 1.0 | divided_by: settings.body_scale }};
+        --font-heading-family: var(--font-family--primary);
+        --font-heading-style: normal;
+        --font-heading-weight: 500;
 
-        --color-base-text: {{ settings.colors_text.red }}, {{ settings.colors_text.green }}, {{ settings.colors_text.blue }};
-        --color-shadow: {{ settings.colors_text.red }}, {{ settings.colors_text.green }}, {{ settings.colors_text.blue }};
-        --color-base-background-1: {{ settings.colors_background_1.red }}, {{ settings.colors_background_1.green }}, {{ settings.colors_background_1.blue }};
-        --color-base-background-2: {{ settings.colors_background_2.red }}, {{ settings.colors_background_2.green }}, {{ settings.colors_background_2.blue }};
-        --color-base-solid-button-labels: {{ settings.colors_solid_button_labels.red }}, {{ settings.colors_solid_button_labels.green }}, {{ settings.colors_solid_button_labels.blue }};
-        --color-base-outline-button-labels: {{ settings.colors_outline_button_labels.red }}, {{ settings.colors_outline_button_labels.green }}, {{ settings.colors_outline_button_labels.blue }};
-        --color-base-accent-1: {{ settings.colors_accent_1.red }}, {{ settings.colors_accent_1.green }}, {{ settings.colors_accent_1.blue }};
-        --color-base-accent-2: {{ settings.colors_accent_2.red }}, {{ settings.colors_accent_2.green }}, {{ settings.colors_accent_2.blue }};
+        --color-black: {{ color_black | color_extract: 'red' }}, {{ color_black | color_extract: 'green' }}, {{ color_black | color_extract: 'blue' }};
+        --color-white: {{ color_white | color_extract: 'red' }}, {{ color_white | color_extract: 'green' }}, {{ color_white | color_extract: 'blue' }};
+        --color-gray-400: {{ color_gray_400 | color_extract: 'red' }}, {{ color_gray_400 | color_extract: 'green' }}, {{ color_gray_400 | color_extract: 'blue' }};
+        --color-gray-500: {{ color_gray_500 | color_extract: 'red' }}, {{ color_gray_500 | color_extract: 'green' }}, {{ color_gray_500 | color_extract: 'blue' }};
+        --color-gray-600: {{ color_gray_600 | color_extract: 'red' }}, {{ color_gray_600 | color_extract: 'green' }}, {{ color_gray_600 | color_extract: 'blue' }};
+        --color-gray-700: {{ color_gray_700 | color_extract: 'red' }}, {{ color_gray_700 | color_extract: 'green' }}, {{ color_gray_700 | color_extract: 'blue' }};
+        --color-blue-500: {{ color_blue_500 | color_extract: 'red' }}, {{ color_blue_500 | color_extract: 'green' }}, {{ color_blue_500 | color_extract: 'blue' }};
+        --color-red-500: {{ color_red_500 | color_extract: 'red' }}, {{ color_red_500 | color_extract: 'green' }}, {{ color_red_500 | color_extract: 'blue' }};
+        --color-yellow-500: {{ color_yellow_500 | color_extract: 'red' }}, {{ color_yellow_500 | color_extract: 'green' }}, {{ color_yellow_500 | color_extract: 'blue' }};
+        --color-green-500: {{ color_green_500 | color_extract: 'red' }}, {{ color_green_500 | color_extract: 'green' }}, {{ color_green_500 | color_extract: 'blue' }};
 
-        --gradient-base-background-1: {% if settings.gradient_background_1 != blank %}{{ settings.gradient_background_1 }}{% else %}{{ settings.colors_background_1 }}{% endif %};
+        --color-primary: var(--color-black);
+        --color-secondary: var(--color-white);
+        --color-tertiary: var(--color-gray-700);
+        --color-accent: var(--color-blue-500);
 
-        --page-width: {{ settings.page_width | divided_by: 10 }}rem;
-        --page-width-margin: {% if settings.page_width == '1600' %}2{% else %}0{% endif %}rem;
+        --color-text: var(--color-primary);
+        --color-shadow: var(--color-primary);
+        --color-background-light: var(--color-white);
+        --color-background-dark: var(--color-gray-400);
+        --color-disabled: var(--color-gray-500);
+        --color-success: var(--color-green-500);
+        --color-warning: var(--color-yellow-500);
+        --color-error: var(--color-red-500);
 
-        --buttons-radius: {{ settings.buttons_radius }}px;
-        --buttons-border-width: {% if settings.buttons_border_opacity > 0 %}{{ settings.buttons_border_thickness }}{% else %}0{% endif %}px;
-        --buttons-border-opacity: {{ settings.buttons_border_opacity | divided_by: 100.0 }};
-        --buttons-shadow-opacity: {{ settings.buttons_shadow_opacity | divided_by: 100.0 }};
-        --buttons-shadow-horizontal-offset: {{ settings.buttons_shadow_horizontal_offset }}px;
-        --buttons-shadow-vertical-offset: {{ settings.buttons_shadow_vertical_offset }}px;
-        --buttons-shadow-blur-radius: {{ settings.buttons_shadow_blur }}px;
-        --buttons-border-offset: {% if settings.buttons_radius > 0 or settings.buttons_shadow_opacity > 0 %}0.3{% else %}0{% endif %}px;
+        --border-radius: 0.8rem;
 
-        --inputs-radius: {{ settings.inputs_radius }}px;
-        --inputs-border-width: {{ settings.inputs_border_thickness }}px;
-        --inputs-border-opacity: {{ settings.inputs_border_opacity | divided_by: 100.0 }};
-        --inputs-shadow-opacity: {{ settings.inputs_shadow_opacity | divided_by: 100.0 }};
-        --inputs-shadow-horizontal-offset: {{ settings.inputs_shadow_horizontal_offset }}px;
-        --inputs-shadow-vertical-offset: {{ settings.inputs_shadow_vertical_offset }}px;
-        --inputs-shadow-blur-radius: {{ settings.inputs_shadow_blur }}px;
+        --page-width: 144rem;
       }
     {% endstyle %}
 
-    {%- unless settings.type_body_font.system? -%}
-      <link rel="preload" as="font" href="{{ settings.type_body_font | font_url }}" type="font/woff2" crossorigin>
-    {%- endunless -%}
-    {%- unless settings.type_header_font.system? -%}
-      <link rel="preload" as="font" href="{{ settings.type_header_font | font_url }}" type="font/woff2" crossorigin>
-    {%- endunless -%}
+    <link rel="preload" as="font" href="{{ 'FuturaNowText.woff2' | asset_url }}" type="font/woff2" crossorigin>
+    <link rel="preload" as="font" href="{{ 'FuturaNowText-Medium.woff2' | asset_url }}" type="font/woff2" crossorigin>
 
     {{ 'template-giftcard.css' | asset_url | stylesheet_tag }}
   </head>
 
-  <body class="gradient">
+  <body>
     <header class="gift-card__title">
       <span class="h2">{{ shop.name }}</span>
       <h1 class="gift-card__heading">{{ 'gift_cards.issued.subtext' | t }}</h1>
@@ -108,7 +135,9 @@
           {% endif %}
         </p>
         {%- if gift_card.enabled == false or gift_card.expired -%}
-          <p class="gift-card__label badge badge--{{ settings.sold_out_badge_color_scheme }}">{{ 'gift_cards.issued.expired' | t }}</p>
+          <p class="gift-card__label badge">
+            {{ 'gift_cards.issued.expired' | t }}
+          </p>
         {%- endif -%}
       </div>
 
@@ -118,13 +147,22 @@
         {%- assign gift_card_balance = gift_card.balance | money -%}
       {% endif %}
       {%- if gift_card.balance != gift_card.initial_value -%}
-        <p class="gift-card__label caption-large">{{ 'gift_cards.issued.remaining_html' | t: balance: gift_card_balance }}</p>
+        <p class="gift-card__label caption-large">
+          {{ 'gift_cards.issued.remaining_html' | t: balance: gift_card_balance }}
+        </p>
       {%- endif -%}
     </header>
 
     <main class="gift-card">
       <div class="gift-card__image-wrapper">
-        <img src="{{ 'gift-card/card.svg' | shopify_asset_url }}" alt="" class="gift-card__image" height="{{ 570 | divided_by: 1.5 }}" width="570" loading="lazy">
+        <img
+          src="{{ 'gift-card/card.svg' | shopify_asset_url }}"
+          alt=""
+          class="gift-card__image"
+          height="{{ 570 | divided_by: 1.5 }}"
+          width="570"
+          loading="lazy"
+        >
       </div>
       <div class="gift-card__qr-code" data-identifier="{{ gift_card.qr_identifier }}"></div>
       <div class="gift-card__information">
@@ -139,12 +177,19 @@
           <button class="link gift-card__copy-link">{{ 'gift_cards.issued.copy_code' | t }}</button>
           <span class="gift-card__copy-success form__message" role="status"></span>
           <template>
-            {%- render 'icon-success' -%}{{ 'gift_cards.issued.copy_code_success' | t }}
+            {%- render 'icon-success' -%}
+            {{ 'gift_cards.issued.copy_code_success' | t }}
           </template>
         </div>
         {%- if gift_card.pass_url -%}
           <a href="{{ gift_card.pass_url }}" class="gift_card__apple-wallet">
-            <img src="{{ 'gift-card/add-to-apple-wallet.svg' | shopify_asset_url }}" width="120" height="40" alt="{{ 'gift_cards.issued.add_to_apple_wallet' | t }}" loading="lazy">
+            <img
+              src="{{ 'gift-card/add-to-apple-wallet.svg' | shopify_asset_url }}"
+              width="120"
+              height="40"
+              alt="{{ 'gift_cards.issued.add_to_apple_wallet' | t }}"
+              loading="lazy"
+            >
           </a>
         {%- endif -%}
         <div class="gift-card__buttons no-print">

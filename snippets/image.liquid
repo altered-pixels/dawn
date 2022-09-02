@@ -1,0 +1,111 @@
+{% comment %}
+    Renders a responsive image
+
+    Accepts:
+    - image: {Object} Image to render (optional)
+    - aspectratio: {String} Aspect ratio for image, separated by '/' (optional)
+    - nomedia: {Boolean} Override to disable aspect ratio padding. Default: false (optional)
+    - crop: {String} Crop param for `image_url` filter. Default: 'center' (optional)
+    - sizes: {String} Sizes attribute for image srcset. Default: '100vw' (optional)
+    - max: {Integer} Maximum rendered image width (Output scaled 2x). (optional)
+    - pad: {String} Hex code for color to pad image with if source image is smaller than output size. (optional)
+    - placeholder: {String} Placeholder to render if no image passed. Default: 'image' (optional)
+    - class: {String} Class to add to image. (optional)
+    - lazyload: {Boolean} Enable lazyload for image. Default: true (optional)
+    - alt: {String} Alt text for image. (optional)
+
+    Usage:
+    {% render 'image',
+      image: block.settings.image,
+      aspectratio: '4/3',
+      sizes: '(max-width: 767px) 100vw, 50vw'
+    %}
+{% endcomment %}
+
+{%- if lazyload == blank -%}
+  {%- assign lazyload = true -%}
+{%- endif -%}
+
+{%- if alt == blank -%}
+  {%- assign alt = image.alt -%}
+{%- endif -%}
+
+{%- if placeholder == blank -%}
+  {%- assign placeholder = 'image' -%}
+{%- endif -%}
+
+{%- if crop == blank -%}
+  {%- assign crop = 'center' -%}
+{%- endif -%}
+
+{%- if aspectratio != blank and nomedia != true -%}
+  {%- assign ar_parts = aspectratio | split: '/' -%}
+  {%- assign ar = ar_parts[1] | times: 1.0 | divided_by: ar_parts[0] -%}
+  {%- assign padding = ar | times: 100 -%}
+
+  <div class="media media--transparent" style="padding-bottom: {{ padding }}%;">
+{%- endif -%}
+
+{%- if image != blank -%}
+  {%- liquid
+    assign srcset_sizes = '200,400,600,800,1000,1200,1400,1600,1800,2000,2200,2400,2600,2800,3000,3200,3400,3600,3800,4000' | split: ','
+    if sizes == blank
+      assign sizes = '100vw'
+    endif
+  -%}
+
+  {%- if max != blank -%}
+    {%- assign scaled_max = max | times: 2 | at_most: image.width -%}
+    {%- assign fallback_size = scaled_max -%}
+    {%- capture srcset_sizes -%}
+      {%- for size in srcset_sizes -%}
+        {%- assign size_int = size | plus: 0 | round -%}
+        {%- if size_int <= scaled_max -%}
+          {{ size_int }}{%- if forloop.last != true -%},{%- endif -%}
+        {%- else -%}
+          {{ size_int }}{%- break -%}
+        {%- endif -%}
+      {%- endfor -%}
+    {%- endcapture -%}
+    {%- assign srcset_sizes = srcset_sizes | split: ',' -%}
+  {%- else -%}
+    {%- assign fallback_size = image.width -%}
+  {%- endif -%}
+
+  {%- capture srcset -%}
+    {%- for size in srcset_sizes -%}
+      {%- assign width = size | plus: 0 | round -%}
+      {%- if ar != blank -%}
+        {%- assign height = width | times: ar -%}
+
+        {%- if pad != blank -%}
+          {%- if image.width >= width -%}{{ image | image_url: width: width, height: height, crop: crop, pad_color: pad }} {{ width }}w,{%- endif -%}
+        {%- else -%}
+          {%- if image.width >= width -%}{{ image | image_url: width: width, height: height, crop: crop }} {{ width }}w,{%- endif -%}
+        {%- endif -%}
+      {%- else -%}
+        {%- if image.width >= width -%}{{ image | image_url: width: width }} {{ width }}w,{%- endif -%}
+      {%- endif -%}
+    {%- endfor -%}
+    {{ image | image_url }} {{ image.width }}w
+  {%- endcapture -%}
+
+  {% comment %}theme-check-disable ImgLazyLoading{% endcomment %}
+  <img
+    srcset="{{ srcset }}"
+    src="{{ image | image_url: width: fallback_size }}"
+    sizes="{{ sizes }}"
+    alt="{{ alt | escape }}"
+    {% if class != blank %}class="{{ class }}"{% endif %}
+    {% unless lazyload == false %}loading="lazy"{% endunless %}
+    width="{{ image.width }}"
+    height="{{ image.height }}"
+  >
+  {% comment %}theme-check-enable ImgLazyLoading{% endcomment %}
+{%- elsif placeholder != 'none' -%}
+  {{ placeholder | placeholder_svg_tag: 'placeholder-svg' }}
+{%- endif -%}
+
+{%- if aspectratio != blank and nomedia != true-%}
+  </div>
+{%- endif -%}

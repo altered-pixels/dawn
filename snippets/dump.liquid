@@ -1,0 +1,7 @@
+<script type="text/javascript">
+  {%- if label == blank -%}
+    {%- assign label = 'Dumping Variable' -%}
+  {%- endif -%}
+
+  console.log('{{ label }}:', {{ value | json }});
+</script>

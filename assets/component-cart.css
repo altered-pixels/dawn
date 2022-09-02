@@ -102,7 +102,7 @@ cart-items {
 .cart__note .field__input {
   height: 100%;
   position: relative;
-  border-radius: var(--inputs-radius);
+  border-radius: 0;
   padding: 1rem 2rem;
 }
 
@@ -174,13 +174,13 @@ cart-items {
 }
 
 .cart__dynamic-checkout-buttons div[role='button'] {
-  border-radius: var(--buttons-radius-outset) !important;
+  border-radius: 0 !important;
 }
 
 .cart-note__label {
   display: inline-block;
   margin-bottom: 1rem;
-  line-height: calc(1 + 1 / var(--font-body-scale));
+  line-height: 2;
 }
 
 .tax-note {
